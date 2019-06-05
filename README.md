@@ -1,5 +1,5 @@
 # Home Assistant Development
-This repository contain my Home Assistant Component(s).
+Based on https://github.com/CrientClash/homeassistant
 
 ## Visonic Alarm Sensor
 This component interfaces with the API server hosted by your home alarm system company.
