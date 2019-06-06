@@ -133,18 +133,43 @@ class ContactDevice(Device):
 
 class CameraDevice(Device):
     """ Camera device class definition. """
-    pass
 
+    @property
+    def state(self):
+        """ Returns the current state of the camera. """
+        return 'UKNOWN'
 
 class SmokeDevice(Device):
     """ Smoke device class definition. """
-    pass
 
+    @property
+    def state(self):
+        """ Returns the current state of the smoke. """
+        return 'UKNOWN'
+
+class MotionDevice(Device):
+    """ Motion device class definition. """
+
+    @property
+    def state(self):
+        """ Returns the current state of the motion. """
+        return 'UKNOWN'
+
+class SmokeDevice(Device):
+    """ Smoke device class definition. """
+
+    @property
+    def state(self):
+        """ Returns the current state of the smoke. """
+        return 'UKNOWN'
 
 class GenericDevice(Device):
-    """ Smoke device class definition. """
-    pass
+    """ Generic device class definition. """
 
+    @property
+    def state(self):
+        """ Returns the current state of the generic device. """
+        return 'UKNOWN'
 
 class System(object):
     """ Class definition of the main alarm system. """
@@ -404,7 +429,7 @@ class System(object):
         self.__system_devices.clear()
 
         for device in devices:
-            if device['subtype'] == 'CONTACT_AUX':
+            if device['subtype'] == 'CONTACT_AUX' or device['subtype'] == 'CONTACT':
                 contact_device = ContactDevice(
                     id=device['device_id'],
                     zone=device['zone'],
@@ -440,6 +465,24 @@ class System(object):
                     partitions=device['partitions']
                 )
                 self.__system_devices.append(camera_device)
+            elif device['subtype'] == 'MOTION' or device['subtype'] == 'CURTAIN':
+                motion_device = MotionDevice(
+                    id=device['device_id'],
+                    zone=device['zone'],
+                    location=device['location'],
+                    device_type=device['device_type'],
+                    type=device['type'],
+                    subtype=device['subtype'],
+                    preenroll=device['preenroll'],
+                    soak=device['soak'],
+                    bypass=device['bypass'],
+                    alarms=device['alarms'],
+                    alerts=device['alerts'],
+                    troubles=device['troubles'],
+                    bypass_availability=device['bypass_availability'],
+                    partitions=device['partitions']
+                )
+                self.__system_devices.append(motion_device)
             elif device['subtype'] == 'SMOKE':
                 smoke_device = SmokeDevice(
                     id=device['device_id'],

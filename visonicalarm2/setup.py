@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="visonicalarm2",
-    version="2.0.0",
+    version="2.0.3",
     author="Andrea Liosi",
     author_email="andrea.liosi@gmail.com",
     description="A simple API library for the Visonic Alarm system.",

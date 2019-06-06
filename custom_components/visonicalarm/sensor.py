@@ -35,12 +35,9 @@ SCAN_INTERVAL = timedelta(seconds=10)
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the Visonic Alarm platform."""
     hub.update()
-    
+
     for device in hub.alarm.devices:
-        if device.subtype == 'CONTACT_AUX':
-            add_devices([VisonicAlarmContact(hub.alarm, device.id)], True)
-        
-        _LOGGER.critical(device.subtype)
+        add_devices([VisonicAlarmContact(hub.alarm, device.id)], True)
 
 
 class VisonicAlarmContact(Entity):
