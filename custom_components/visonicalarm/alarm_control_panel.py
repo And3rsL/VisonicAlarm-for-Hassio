@@ -198,3 +198,15 @@ class VisonicAlarm(alarm.AlarmControlPanel):
             pn.create(self._hass, 'The alarm system is not in a ready state. '
                                   'Maybe there are doors or windows open?',
                       title='Unable to Arm')
+
+    @property
+    def supported_features(self) -> int:
+        """Return the list of supported features."""
+        """Make this non-dynamic later..."""
+        try:
+            c = __import__("homeassistant.components.alarm_control_panel.const",fromlist=['SUPPORT_ALARM_ARM_HOME', 'SUPPORT_ALARM_ARM_AWAY', 'SUPPORT_ALARM_ARM_NIGHT', 'SUPPORT_ALARM_TRIGGER'])
+            _LOGGER.debug('supported: ' + str(c.SUPPORT_ALARM_ARM_HOME | c.SUPPORT_ALARM_ARM_AWAY | c.SUPPORT_ALARM_ARM_NIGHT | c.SUPPORT_ALARM_TRIGGER))
+            return c.SUPPORT_ALARM_ARM_HOME | c.SUPPORT_ALARM_ARM_AWAY | c.SUPPORT_ALARM_ARM_NIGHT | c.SUPPORT_ALARM_TRIGGER
+        except ModuleNotFoundError:
+            _LOGGER.debug('not supported')
+            return 0
