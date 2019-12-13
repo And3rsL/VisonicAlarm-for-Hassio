@@ -4,7 +4,7 @@ Based on https://github.com/CrientClash/homeassistant
 ## Visonic Alarm Sensor
 This component interfaces with the API server hosted by your home alarm system company.
 
-It is dependant on the Python module: https://github.com/And3rsL/visonicalarm2, which will automatically be installed when running the sensor component. This library has much more functionality than this component utilises, so feel free to check it out of you are into Python 3 programming.
+It is dependant on the Python module: https://github.com/And3rsL/VisonicAlarm-for-Hassio/tree/master/visonicalarm2, which will automatically be installed when running the sensor component. This library has much more functionality than this component utilises, so feel free to check it out of you are into Python 3 programming.
 
 This is unsupported by Visonic - they don't publish their REST API. It is also unsupported by me. I accept no liability for your use of the component or library nor for any loss or damage resulting from security breaches at your property.
 
