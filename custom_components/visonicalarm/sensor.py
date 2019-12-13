@@ -37,7 +37,8 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     hub.update()
 
     for device in hub.alarm.devices:
-        add_devices([VisonicAlarmContact(hub.alarm, device.id)], True)
+        if device.subtype == 'CONTACT_AUX' or device.subtype == 'CONTACT' or device.subtype == 'MOTION_CAMERA' or device.subtype == 'MOTION' or device.subtype == 'CURTAIN':
+          add_devices([VisonicAlarmContact(hub.alarm, device.id)], True)
 
 
 class VisonicAlarmContact(Entity):
@@ -57,7 +58,7 @@ class VisonicAlarmContact(Entity):
     @property
     def name(self):
         """ Return the name of the sensor """
-        return 'Visonic Alarm Contact ' + self._id
+        return 'Visonic Alarm ' + str(self._id)
 
     @property
     def state_attributes(self):
