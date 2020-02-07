@@ -38,6 +38,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
     for device in hub.alarm.devices:
         if device.subtype == 'CONTACT_AUX' or device.subtype == 'CONTACT' or device.subtype == 'MOTION_CAMERA' or device.subtype == 'MOTION' or device.subtype == 'CURTAIN':
+          _LOGGER.debug("New device found [Type:" + str(device.subtype) + "] [ID:" + str(device.id) + "]")
           add_devices([VisonicAlarmContact(hub.alarm, device.id)], True)
 
 

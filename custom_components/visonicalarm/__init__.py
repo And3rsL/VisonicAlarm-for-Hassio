@@ -15,7 +15,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.util import Throttle
 import homeassistant.helpers.config_validation as cv
 
-REQUIREMENTS = ['visonicalarm2==2.0.3', 'python-dateutil==2.7.3']
+REQUIREMENTS = ['visonicalarm2==2.0.4', 'python-dateutil==2.7.3']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -110,12 +110,15 @@ class VisonicAlarmHub(Entity):
     def update(self):
         """ Update all alarm statuses. """
         try:
+            if self.alarm.is_token_valid == False:
+                self.alarm.connect()
+            
             self.alarm.update_status()
-            # self.alarm.update_alarms()
-            # self.alarm.update_events()
-            # self.alarm.update_troubles()
-            # self.alarm.update_alerts()
+            #self.alarm.update_alarms()
+            #self.alarm.update_troubles()
+            #self.alarm.update_alerts()
             self.alarm.update_devices()
+
             self._last_update = datetime.now()
 #            _LOGGER.error('Update went OK [%s].', self.alarm.model)
         except Exception as ex:

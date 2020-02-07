@@ -9,12 +9,18 @@ import homeassistant.components.alarm_control_panel as alarm
 import homeassistant.components.persistent_notification as pn
 from homeassistant.const import (STATE_ALARM_ARMED_AWAY, STATE_ALARM_ARMED_HOME,
                                  STATE_ALARM_DISARMED, STATE_UNKNOWN,
-                                 STATE_ALARM_ARMING, STATE_ALARM_PENDING)
+                                 STATE_ALARM_ARMING, STATE_ALARM_PENDING, STATE_ALARM_TRIGGERED )
 from homeassistant.const import (EVENT_STATE_CHANGED)
 from homeassistant.const import (ATTR_CODE_FORMAT)
+from homeassistant.components.alarm_control_panel.const import (
+    SUPPORT_ALARM_ARM_AWAY,
+    SUPPORT_ALARM_ARM_HOME
+)
 from . import HUB as hub
 from . import (CONF_USER_CODE,
                                             CONF_EVENT_HOUR_OFFSET)
+
+SUPPORT_VISONIC = (SUPPORT_ALARM_ARM_HOME | SUPPORT_ALARM_ARM_AWAY)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -157,8 +163,15 @@ class VisonicAlarm(alarm.AlarmControlPanel):
             self._state = STATE_ALARM_ARMING
         elif status == 'EntryDelay':
             self._state = STATE_ALARM_PENDING
+        elif status == 'Alarm':
+            self._state = STATE_ALARM_TRIGGERED
         else:
             self._state = status
+
+    @property
+    def supported_features(self) -> int:
+        """Return the list of supported features."""
+        return SUPPORT_VISONIC
 
     def alarm_disarm(self, code=None):
         """ Send disarm command. """
@@ -198,15 +211,3 @@ class VisonicAlarm(alarm.AlarmControlPanel):
             pn.create(self._hass, 'The alarm system is not in a ready state. '
                                   'Maybe there are doors or windows open?',
                       title='Unable to Arm')
-
-    @property
-    def supported_features(self) -> int:
-        """Return the list of supported features."""
-        """Make this non-dynamic later..."""
-        try:
-            c = __import__("homeassistant.components.alarm_control_panel.const",fromlist=['SUPPORT_ALARM_ARM_HOME', 'SUPPORT_ALARM_ARM_AWAY', 'SUPPORT_ALARM_ARM_NIGHT', 'SUPPORT_ALARM_TRIGGER'])
-            _LOGGER.debug('supported: ' + str(c.SUPPORT_ALARM_ARM_HOME | c.SUPPORT_ALARM_ARM_AWAY | c.SUPPORT_ALARM_ARM_NIGHT | c.SUPPORT_ALARM_TRIGGER))
-            return c.SUPPORT_ALARM_ARM_HOME | c.SUPPORT_ALARM_ARM_AWAY | c.SUPPORT_ALARM_ARM_NIGHT | c.SUPPORT_ALARM_TRIGGER
-        except ModuleNotFoundError:
-            _LOGGER.debug('not supported')
-            return 0
