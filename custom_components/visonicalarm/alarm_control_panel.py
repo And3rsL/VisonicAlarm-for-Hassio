@@ -35,6 +35,7 @@ ATTR_SYSTEM_LAST_UPDATE = 'last_update'
 ATTR_CODE_FORMAT = 'code_format'
 ATTR_CHANGED_BY = 'changed_by'
 ATTR_CHANGED_TIMESTAMP = 'changed_timestamp'
+ATTR_ALARMS = 'alarm'
 
 SCAN_INTERVAL = timedelta(seconds=10)
 
@@ -80,6 +81,7 @@ class VisonicAlarm(alarm.AlarmControlPanel):
         self._changed_by = None
         self._changed_timestamp = None
         self._event_hour_offset = hub.config.get(CONF_EVENT_HOUR_OFFSET)
+        self._alarm = False
 
     @property
     def name(self):
@@ -101,6 +103,7 @@ class VisonicAlarm(alarm.AlarmControlPanel):
             ATTR_CODE_FORMAT: self.code_format,
             ATTR_CHANGED_BY: self.changed_by,
             ATTR_CHANGED_TIMESTAMP: self._changed_timestamp,
+            ATTR_ALARMS: hub.alarm.alarm,
         }
 
     @property
