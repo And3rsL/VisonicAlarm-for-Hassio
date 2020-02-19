@@ -3,7 +3,7 @@
   "name": "Visonic/Bentel Alarm System",
   "documentation": "https://github.com/And3rsL/VisonicAlarm-for-Hassio",
   "requirements": [
-    "visonicalarm2==2.0.8",
+    "visonicalarm2==2.1.0",
     "python-dateutil==2.7.3"
   ],
   "dependencies": [],

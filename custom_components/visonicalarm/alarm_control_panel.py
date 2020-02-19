@@ -154,15 +154,13 @@ class VisonicAlarm(alarm.AlarmControlPanel):
         """ Update alarm status. """
         hub.update()
         status = hub.alarm.state
-        if status == 'Away':
+        if status == 'Away' or status == 'Away Instant':
             self._state = STATE_ALARM_ARMED_AWAY
-        elif status == 'Home':
+        elif status == 'Home' or status == 'Home Instant':
             self._state = STATE_ALARM_ARMED_HOME
         elif status == 'Disarm':
             self._state = STATE_ALARM_DISARMED
-        elif status == 'ExitDelayHome':
-            self._state = STATE_ALARM_ARMING
-        elif status == 'ExitDelayAway':
+        elif status == 'ExitDelayHome' or status == 'ExitDelayAway' or status == 'ExitDelayHome Instant' or status == 'ExitDelayAway Instant':
             self._state = STATE_ALARM_ARMING
         elif status == 'EntryDelay':
             self._state = STATE_ALARM_PENDING
