@@ -17,8 +17,7 @@ from homeassistant.components.alarm_control_panel.const import (
     SUPPORT_ALARM_ARM_HOME
 )
 from . import HUB as hub
-from . import (CONF_USER_CODE,
-                                            CONF_EVENT_HOUR_OFFSET)
+from . import (CONF_USER_CODE, CONF_EVENT_HOUR_OFFSET, CONF_NO_PIN_REQUIRED, CONF_ARM_DISARM_INSTANT)
 
 SUPPORT_VISONIC = (SUPPORT_ALARM_ARM_HOME | SUPPORT_ALARM_ARM_AWAY)
 
@@ -78,6 +77,8 @@ class VisonicAlarm(alarm.AlarmControlPanel):
         self._hass = hass
         self._state = STATE_UNKNOWN
         self._code = hub.config.get(CONF_USER_CODE)
+        self._no_pin_required = hub.config.get(CONF_NO_PIN_REQUIRED)
+        self._arm_disarm_instant = hub.config.get(CONF_ARM_DISARM_INSTANT)
         self._changed_by = None
         self._changed_timestamp = None
         self._event_hour_offset = hub.config.get(CONF_EVENT_HOUR_OFFSET)
@@ -128,7 +129,10 @@ class VisonicAlarm(alarm.AlarmControlPanel):
     @property
     def code_format(self):
         """ Return one or more digits/characters. """
-        return 'Number'
+        if self._no_pin_required:
+            return None
+        else:
+            return 'Number'
 
     @property
     def changed_by(self):
@@ -176,23 +180,30 @@ class VisonicAlarm(alarm.AlarmControlPanel):
 
     def alarm_disarm(self, code=None):
         """ Send disarm command. """
-        if code != self._code:
-            pn.create(self._hass, 'You entered the wrong disarm code.',
-                      title='Disarm Failed')
-            return
+        if self._no_pin_required == False:
+            if code != self._code:
+                pn.create(self._hass, 'You entered the wrong disarm code.', title='Disarm Failed')
+                return
+            
         hub.alarm.disarm()
+        sleep(1)
+        self.update()
 
     def alarm_arm_home(self, code=None):
         """ Send arm home command. """
-        if code != self._code:
-            pn.create(self._hass, 'You entered the wrong arm code.',
-                      title='Arm Failed')
-            return
+        if self._no_pin_required == False:
+            if code != self._code:
+                pn.create(self._hass, 'You entered the wrong arm code.', title='Arm Failed')
+                return
 
         if hub.alarm.ready:
-            hub.alarm.arm_home()
-            sleep(0.5)
-            hub.update(no_throttle=True)
+            if self._arm_disarm_instant:
+                hub.alarm.arm_home_instant()
+            else:
+                hub.alarm.arm_home()
+
+            sleep(1)
+            self.update()
         else:
             pn.create(self._hass, 'The alarm system is not in a ready state. '
                                   'Maybe there are doors or windows open?',
@@ -200,14 +211,19 @@ class VisonicAlarm(alarm.AlarmControlPanel):
 
     def alarm_arm_away(self, code=None):
         """ Send arm away command. """
-        if code != self._code:
-            pn.create(self._hass, 'You entered the wrong arm code.',
-                      title='Unable to Arm')
-            return
+        if self._no_pin_required == False:
+            if code != self._code:
+                pn.create(self._hass, 'You entered the wrong arm code.', title='Unable to Arm')
+                return
+            
         if hub.alarm.ready:
-            hub.alarm.arm_away()
-            sleep(0.5)
-            hub.update(no_throttle=True)
+            if self._arm_disarm_instant:
+                hub.alarm.arm_away_instant()
+            else:
+                hub.alarm.arm_away()
+
+            sleep(1)
+            self.update()
         else:
             pn.create(self._hass, 'The alarm system is not in a ready state. '
                                   'Maybe there are doors or windows open?',

@@ -21,7 +21,8 @@ _LOGGER = logging.getLogger(__name__)
 
 CONF_ALARM = 'alarm'
 CONF_DOOR_WINDOW = 'door_window'
-
+CONF_NO_PIN_REQUIRED = 'no_pin_required'
+CONF_ARM_DISARM_INSTANT = 'arm_disarm_instant'
 CONF_USER_CODE = 'user_code'
 CONF_USER_ID = 'user_id'
 CONF_PANEL_ID = 'panel_id'
@@ -52,6 +53,8 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
         vol.Optional(CONF_ALARM, default=True): cv.boolean,
         vol.Optional(CONF_DOOR_WINDOW, default=True): cv.boolean,
+        vol.Optional(CONF_NO_PIN_REQUIRED, default=False): cv.boolean,
+        vol.Optional(CONF_ARM_DISARM_INSTANT, default=False): cv.boolean,
         vol.Optional(CONF_EVENT_HOUR_OFFSET, default=0): vol.All(vol.Coerce(int), vol.Range(min=-24, max=24)),
     }),
 }, extra=vol.ALLOW_EXTRA)

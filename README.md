@@ -31,6 +31,8 @@ visonicalarm:
   user_id: 00000000-0000-0000-0000-000000000000
   panel_id: 123456
   partition: ALL
+  no_pin_required: False
+  arm_disarm_instant: False
 ```
 
 The **host**, **user_code** and **panel_id** are the same you are using when logging in to your system via the Visonic-GO app,
