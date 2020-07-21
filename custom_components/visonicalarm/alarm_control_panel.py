@@ -69,7 +69,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     hass.bus.listen(EVENT_STATE_CHANGED, arm_event_listener)
 
 
-class VisonicAlarm(alarm.AlarmControlPanel):
+class VisonicAlarm(alarm.AlarmControlPanelEntity):
     """ Representation of a Visonic Alarm control panel. """
 
     def __init__(self, hass):
