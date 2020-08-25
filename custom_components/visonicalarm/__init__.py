@@ -15,16 +15,15 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.util import Throttle
 import homeassistant.helpers.config_validation as cv
 
-REQUIREMENTS = ['visonicalarm2==2.1.0', 'python-dateutil==2.7.3']
+REQUIREMENTS = ['visonicalarm2==3.0.8', 'python-dateutil==2.7.3']
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_ALARM = 'alarm'
-CONF_DOOR_WINDOW = 'door_window'
 CONF_NO_PIN_REQUIRED = 'no_pin_required'
-CONF_ARM_DISARM_INSTANT = 'arm_disarm_instant'
 CONF_USER_CODE = 'user_code'
-CONF_USER_ID = 'user_id'
+CONF_APP_ID = 'app_id'
+CONF_USER_EMAIL = 'user_email'
+CONF_USER_PASSWORD = 'user_password'
 CONF_PANEL_ID = 'panel_id'
 CONF_PARTITION = 'partition'
 CONF_EVENT_HOUR_OFFSET = 'event_hour_offset'
@@ -46,15 +45,14 @@ HUB = None
 CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
         vol.Required(CONF_HOST): cv.string,
+        vol.Required(CONF_APP_ID): cv.string,
         vol.Required(CONF_USER_CODE): cv.string,
-        vol.Required(CONF_USER_ID): cv.string,
+        vol.Required(CONF_USER_EMAIL): cv.string,
+        vol.Required(CONF_USER_PASSWORD): cv.string,
         vol.Required(CONF_PANEL_ID): cv.string,
         vol.Optional(CONF_PARTITION, default=DEFAULT_PARTITION): cv.string,
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
-        vol.Optional(CONF_ALARM, default=True): cv.boolean,
-        vol.Optional(CONF_DOOR_WINDOW, default=True): cv.boolean,
         vol.Optional(CONF_NO_PIN_REQUIRED, default=False): cv.boolean,
-        vol.Optional(CONF_ARM_DISARM_INSTANT, default=False): cv.boolean,
         vol.Optional(CONF_EVENT_HOUR_OFFSET, default=0): vol.All(vol.Coerce(int), vol.Range(min=-24, max=24)),
     }),
 }, extra=vol.ALLOW_EXTRA)
@@ -90,8 +88,10 @@ class VisonicAlarmHub(Entity):
         self._lock = threading.Lock()
 
         self.alarm = visonicalarm.System(domain_config[CONF_HOST],
+                                         domain_config[CONF_APP_ID],
                                          domain_config[CONF_USER_CODE],
-                                         domain_config[CONF_USER_ID],
+                                         domain_config[CONF_USER_EMAIL],
+                                         domain_config[CONF_USER_PASSWORD],
                                          domain_config[CONF_PANEL_ID],
                                          domain_config[CONF_PARTITION])
 
@@ -123,7 +123,6 @@ class VisonicAlarmHub(Entity):
             self.alarm.update_devices()
 
             self._last_update = datetime.now()
-#            _LOGGER.error('Update went OK [%s].', self.alarm.model)
         except Exception as ex:
             _LOGGER.error('Update failed: %s', ex)
             raise

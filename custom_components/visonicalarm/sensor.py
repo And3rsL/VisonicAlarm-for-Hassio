@@ -24,9 +24,8 @@ STATE_ATTR_SYSTEM_ACTIVE = 'active'
 STATE_ATTR_SYSTEM_CONNECTED = 'connected'
 
 CONTACT_ATTR_ZONE = 'zone'
-CONTACT_ATTR_LOCATION = 'location'
+CONTACT_ATTR_NAME = 'name'
 CONTACT_ATTR_DEVICE_TYPE = 'device_type'
-CONTACT_ATTR_TYPE = 'type'
 CONTACT_ATTR_SUBTYPE = 'subtype'
 
 SCAN_INTERVAL = timedelta(seconds=10)
@@ -50,10 +49,9 @@ class VisonicAlarmContact(Entity):
         self._state = STATE_UNKNOWN
         self._alarm = alarm
         self._id = contact_id
+        self._name = None
         self._zone = None
-        self._location = None
         self._device_type = None
-        self._type = None
         self._subtype = None
 
     @property
@@ -66,9 +64,8 @@ class VisonicAlarmContact(Entity):
         """Return the state attributes of the alarm system."""
         return {
             CONTACT_ATTR_ZONE: self._zone,
-            CONTACT_ATTR_LOCATION: self._location,
+            CONTACT_ATTR_NAME: self._name,
             CONTACT_ATTR_DEVICE_TYPE: self._device_type,
-            CONTACT_ATTR_TYPE: self._type,
             CONTACT_ATTR_SUBTYPE: self._subtype
         }
 
@@ -108,9 +105,8 @@ class VisonicAlarmContact(Entity):
                 self._state = STATE_UNKNOWN
 
             self._zone = device.zone
-            self._location = device.location
+            self._name = device.name
             self._device_type = device.device_type
-            self._type = device.type
             self._subtype = device.subtype
 
             _LOGGER.debug("Device state updated to %d W", self._state)
