@@ -62,6 +62,10 @@ class VisonicAlarmContact(Entity):
         return 'Visonic Alarm ' + str(self._id)
 
     @property
+    def unique_id(self):
+        return self._id
+
+    @property
     def state_attributes(self):
         """Return the state attributes of the alarm system."""
         return {
