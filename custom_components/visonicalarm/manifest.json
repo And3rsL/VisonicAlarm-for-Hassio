@@ -4,9 +4,11 @@
   "documentation": "https://github.com/And3rsL/VisonicAlarm-for-Hassio",
   "version": "v3.0.2",
   "requirements": [
-    "visonicalarm2==3.1.0",
+    "git+https://github.com/chrisns/VisonicAlarm2.git@patch-1#visonicalarm2==3.2",
     "python-dateutil==2.7.3"
   ],
   "dependencies": [],
-  "codeowners": ["@And3rsL"]
+  "codeowners": [
+    "@And3rsL"
+  ]
 }
