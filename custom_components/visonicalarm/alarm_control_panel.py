@@ -190,15 +190,13 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
                 pn.create(self._hass, 'You entered the wrong arm code.', title='Arm Failed')
                 return
 
-        if hub.alarm.ready:
-            hub.alarm.arm_home()
+        process_status_token = hub.alarm.arm_home()
+        sleep(2)
 
-            sleep(1)
-            self.update()
-        else:
-            pn.create(self._hass, 'The alarm system is not in a ready state. '
-                                  'Maybe there are doors or windows open?',
-                      title='Arm Failed')
+        process_status = hub.alarm.get_process_status(process_status_token["process_token"])
+
+        if process_status["status"] == "failed":
+            pn.create(self._hass, process_status["message"], title='Arm Failed')
 
     def alarm_arm_away(self, code=None):
         """ Send arm away command. """
@@ -206,13 +204,11 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
             if code != self._code:
                 pn.create(self._hass, 'You entered the wrong arm code.', title='Unable to Arm')
                 return
-            
-        if hub.alarm.ready:
-            hub.alarm.arm_away()
 
-            sleep(1)
-            self.update()
-        else:
-            pn.create(self._hass, 'The alarm system is not in a ready state. '
-                                  'Maybe there are doors or windows open?',
-                      title='Unable to Arm')
+        process_status_token = hub.alarm.arm_away()
+        sleep(2)
+
+        process_status = hub.alarm.get_process_status(process_status_token["process_token"])
+
+        if process_status["status"] == "failed":
+            pn.create(self._hass, process_status["message"], title='Arm Failed')
