@@ -105,15 +105,15 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
     def icon(self):
         """ Return icon """
         if self._state == STATE_ALARM_ARMED_AWAY:
-            return 'mdi:lock'
+            return 'mdi:shield-lock'
         elif self._state == STATE_ALARM_ARMED_HOME:
-            return 'mdi:lock-outline'
+            return 'mdi:shield-home'
         elif self._state == STATE_ALARM_DISARMED:
-            return 'mdi:lock-open'
+            return 'mdi:shield-check'
         elif self._state == STATE_ALARM_ARMING:
-            return 'mdi:lock-clock'
+            return 'mdi:shield-outline'
         else:
-            return 'mdi:lock-alert'
+            return 'hass:bell-ring'
 
     @property
     def state(self):
