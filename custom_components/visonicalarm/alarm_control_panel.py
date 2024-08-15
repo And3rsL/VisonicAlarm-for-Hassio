@@ -69,7 +69,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
 class VisonicAlarm(alarm.AlarmControlPanelEntity):
     """ Representation of a Visonic Alarm control panel. """
-
+    _attr_code_arm_required = False
     def __init__(self, hass):
         """ Initialize the Visonic Alarm panel. """
         self._hass = hass
