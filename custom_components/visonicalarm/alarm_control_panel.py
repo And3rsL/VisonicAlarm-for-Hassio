@@ -1,25 +1,29 @@
 """
 Interfaces with the Visonic Alarm control panel.
 """
+
 import logging
 from time import sleep
 from datetime import timedelta
 
 import homeassistant.components.alarm_control_panel as alarm
+from homeassistant.components.alarm_control_panel import AlarmControlPanelEntityFeature
 import homeassistant.components.persistent_notification as pn
-from homeassistant.const import (STATE_ALARM_ARMED_AWAY, STATE_ALARM_ARMED_HOME,
-                                 STATE_ALARM_DISARMED, STATE_UNKNOWN,
-                                 STATE_ALARM_ARMING, STATE_ALARM_PENDING, STATE_ALARM_TRIGGERED )
-from homeassistant.const import (EVENT_STATE_CHANGED)
-from homeassistant.const import (ATTR_CODE_FORMAT)
-from homeassistant.components.alarm_control_panel.const import (
-    SUPPORT_ALARM_ARM_AWAY,
-    SUPPORT_ALARM_ARM_HOME
+from homeassistant.const import (
+    ATTR_CODE_FORMAT,
+    EVENT_STATE_CHANGED,
+    STATE_ALARM_ARMED_AWAY,
+    STATE_ALARM_ARMED_HOME,
+    STATE_ALARM_ARMING,
+    STATE_ALARM_DISARMED,
+    STATE_ALARM_PENDING,
+    STATE_ALARM_TRIGGERED,
+    STATE_UNKNOWN,
 )
-from . import HUB as hub
-from . import (CONF_USER_CODE, CONF_EVENT_HOUR_OFFSET, CONF_NO_PIN_REQUIRED)
 
-SUPPORT_VISONIC = (SUPPORT_ALARM_ARM_HOME | SUPPORT_ALARM_ARM_AWAY)
+from . import CONF_EVENT_HOUR_OFFSET, CONF_NO_PIN_REQUIRED, CONF_USER_CODE, HUB as hub
+
+SUPPORT_VISONIC = AlarmControlPanelEntityFeature.ARM_HOME | AlarmControlPanelEntityFeature.ARM_AWAY
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,7 +33,6 @@ ATTR_SYSTEM_READY = 'ready'
 ATTR_SYSTEM_CONNECTED = 'connected'
 ATTR_SYSTEM_SESSION_TOKEN = 'session_token'
 ATTR_SYSTEM_LAST_UPDATE = 'last_update'
-ATTR_CODE_FORMAT = 'code_format'
 ATTR_CHANGED_BY = 'changed_by'
 ATTR_CHANGED_TIMESTAMP = 'changed_timestamp'
 ATTR_ALARMS = 'alarm'
@@ -79,11 +82,17 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
         self._changed_by = None
         self._changed_timestamp = None
         self._event_hour_offset = hub.config.get(CONF_EVENT_HOUR_OFFSET)
+        self._id = hub.alarm.serial_number
 
     @property
     def name(self):
         """ Return the name of the device. """
         return 'Visonic Alarm'
+
+    @property
+    def unique_id(self):
+        """Return a unique id."""
+        return self._id
 
     @property
     def state_attributes(self):
