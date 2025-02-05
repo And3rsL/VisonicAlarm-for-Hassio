@@ -4,7 +4,7 @@
   "documentation": "https://github.com/And3rsL/VisonicAlarm-for-Hassio",
   "version": "v3.1.0",
   "requirements": [
-    "visonicalarm2==3.2.0",
+    "visonicalarm2==3.2.1",
     "python-dateutil==2.7.3"
   ],
   "dependencies": [],
