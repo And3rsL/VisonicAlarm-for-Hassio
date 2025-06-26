@@ -1,12 +1,12 @@
 {
   "domain": "visonicalarm",
   "name": "Visonic/Bentel/Tyco Alarm System",
-  "documentation": "https://github.com/And3rsL/VisonicAlarm-for-Hassio",
-  "version": "v3.1.0",
+  "documentation": "https://github.com/a94marbo/VisonicAlarm-for-Hassio",
+  "version": "v3.1.1",
   "requirements": [
-    "visonicalarm2==3.2.1",
+    "visonicalarm2==3.2.2",
     "python-dateutil==2.7.3"
   ],
   "dependencies": [],
-  "codeowners": ["@And3rsL"]
+  "codeowners": ["a94marbo"]
 }
